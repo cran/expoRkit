@@ -1,0 +1,16 @@
+ba5f0efb3ee2bf8553340ec209a27e08 *DESCRIPTION
+b48d63cd3a61c2a46c88c3ec78502cd9 *NAMESPACE
+4889b353660b19522c5d4660faf57385 *R/data.R
+ca57a6dea4b43e8776107ef282433160 *R/expoRkit-package.R
+0bc04f184b76c3901f01d9d053e5c97c *R/expoRkit.R
+a4231fd15005bba92b519d342ac0508d *R/expv.R
+567f8f627d16e6f4d484db975d5e3640 *README.md
+fd8151769a8864b80c11dd9f2039c31c *data/orani.RData
+4ec523dfc39d2cbd2f06ff1300d727cf *man/Rexpv.Rd
+e1c30ef79d2d830a36681f2e6cd7c352 *man/expoRkit.Rd
+f8c4fd0244048375b5c1922bb581e1b9 *man/expv-methods.Rd
+58cf1583ac50de1b349a34c7473192af *man/orani.Rd
+a9d2f8135801a47c46e450dc874b2b47 *man/padm.Rd
+3996e7c16bfb96fad295ee425815cb4d *src/Makevars
+07ff48b83c8b9846281f1b8a117170ad *src/Rinterface.f
+c47f2fc6af89a8ee6c95b69fc7697702 *src/expokit.f
