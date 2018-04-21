@@ -1,6 +1,7 @@
 export(expv)
 export(padm)
 exportMethods(expv)
+importFrom("methods", "as", "callGeneric")
 importClassesFrom(Matrix,CsparseMatrix)
 importClassesFrom(Matrix,TsparseMatrix)
 importClassesFrom(Matrix,dgCMatrix)
