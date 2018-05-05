@@ -1,4 +1,4 @@
-8d3e2db96a452a8befccfd3b58559c85 *DESCRIPTION
+9161dcecc89c566b2211e42a504fd49c *DESCRIPTION
 edfa8d60bc595417d5fca6c86df9e8ba *NAMESPACE
 4889b353660b19522c5d4660faf57385 *R/data.R
 ca57a6dea4b43e8776107ef282433160 *R/expoRkit-package.R
@@ -13,5 +13,5 @@ f8c4fd0244048375b5c1922bb581e1b9 *man/expv-methods.Rd
 a9d2f8135801a47c46e450dc874b2b47 *man/padm.Rd
 3996e7c16bfb96fad295ee425815cb4d *src/Makevars
 07ff48b83c8b9846281f1b8a117170ad *src/Rinterface.f
-9e6495876a0519a37e0d7de1485fb6e1 *src/expokit.f
+2c8b3e3df0abe071cd526607ff9c4bd0 *src/expokit.f
 3d4b29b3816f1ecda62343e0d6f456ef *src/init.c
