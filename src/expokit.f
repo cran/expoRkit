@@ -107,14 +107,14 @@
       subroutine zgcoov ( x, y, a, ia, ja, n, nz )
       implicit none
       integer i, j, n, nz, ia(nz), ja(nz)
-      complex*16 x(n), y(n), a(nz)
+      complex(8) x(n), y(n), a(nz)
 *
 *---  Computes y = A*x. Complex version.
 *---  A is in the COOrdinates storage format.
 *---  In the original Expokit code, A is stored in a 'common block'.
 *---  For array argument passing of the matrix from R this was rewritten.
 *
-      complex*16 ZERO
+      complex(8) ZERO
       parameter( ZERO=(0.0d0,0.0d0) )
  
       do j = 1,n
@@ -128,14 +128,14 @@
       subroutine zgccsv( x, y, a, ia, ja, n, nz )
       implicit none
       integer i, j, n, nz, ia(nz), ja(n+1)
-      complex*16 x(n), y(n), a(nz)
+      complex(8) x(n), y(n), a(nz)
 *
 *---  Computes y = A*x. Complex version.
 *---  A is in the Compressed Column Storage (CCS) format.
 *---  In the original Expokit code, A is stored in a 'common block'.
 *---  For array argument passing of the matrix from R this was rewritten.
 *
-      complex*16 ZERO
+      complex(8) ZERO
       parameter( ZERO=(0.0d0,0.0d0) )
       do i = 1,n
          y(i) = ZERO
@@ -151,14 +151,14 @@
       subroutine zgcrsv ( x, y, a, ia, ja, n, nz )
       implicit none
       integer i, j, n, nz, ia(n+1), ja(nz)
-      complex*16 x(n), y(n), a(nz)
+      complex(8) x(n), y(n), a(nz)
 *
 *---  Computes y = A*x. Complex version.
 *---  A is in the Compressed Row Storage (CRS) format.
 *---  In the original Expokit code, A is stored in a 'common block'.
 *---  For array argument passing of the matrix from R this was rewritten.
 *
-      complex*16 ZERO
+      complex(8) ZERO
       parameter( ZERO=(0.0d0,0.0d0) )
 
       do i = 1,n
@@ -466,21 +466,24 @@
 *
       nexph = nexph + 1
       mx = mbrkdwn + k1
-      if ( ideg.ne.0 ) then
+c$$$  The ideg is set to default value 6 and cannot be changed from the R 
+c$$$  interface. Due to type conversion warnings, the code for using the 
+c$$$  rational Chebyshev approximation instead of pade has been commented out.
+c$$$      if ( ideg.ne.0 ) then
 *---     irreducible rational Pade approximation ...
          call DGPADM( ideg, mx, sgn*t_step, wsp(ih),mh,
      .                wsp(ifree),lfree, iwsp, iexph, ns, iflag )
          iexph = ifree + iexph - 1
          nscale = nscale + ns
-      else
-*---     uniform rational Chebyshev approximation ...
-         iexph = ifree
-         do i = 1,mx
-            wsp(iexph+i-1) = 0.0d0
-         enddo
-         wsp(iexph) = 1.0d0
-         call DNCHBV(mx,sgn*t_step,wsp(ih),mh,wsp(iexph),wsp(ifree+mx))
-      endif
+c$$$      else
+c$$$*---     uniform rational Chebyshev approximation ...
+c$$$         iexph = ifree
+c$$$         do i = 1,mx
+c$$$            wsp(iexph+i-1) = 0.0d0
+c$$$         enddo
+c$$$         wsp(iexph) = 1.0d0
+c$$$         call DNCHBV(mx,sgn*t_step,wsp(ih),mh,wsp(iexph),wsp(ifree+mx))
+c$$$      endif
 
 * 
 *---  error estimate ...
@@ -961,7 +964,7 @@
       implicit none
       double precision t
       integer          ideg, m, ldh, lwsp, iexph, ns, iflag, ipiv(m)
-      complex*16       H(ldh,m), wsp(lwsp)
+      complex(8)       H(ldh,m), wsp(lwsp)
 
 *-----Purpose----------------------------------------------------------|
 *
@@ -1005,7 +1008,7 @@
 *
       integer i,j,k,icoef,mm,ih2,iodd,iused,ifree,iq,ip,iput,iget
       double precision hnorm
-      complex*16 cp, cq, scale, scale2, ZERO, ONE
+      complex(8) cp, cq, scale, scale2, ZERO, ONE
 
       parameter( ZERO=(0.0d0,0.0d0), ONE=(1.0d0,0.0d0) )
       intrinsic ABS, DCMPLX, DBLE, INT, LOG, MAX
@@ -1139,7 +1142,7 @@ c$$$
 c$$$      implicit none
 c$$$      double precision t
 c$$$      integer          ideg, m, ldh, lwsp, iexph, ns, iflag, ipiv(m)
-c$$$      complex*16       H(ldh,m), wsp(lwsp)
+c$$$      complex(8)       H(ldh,m), wsp(lwsp)
 c$$$
 c$$$*-----Purpose----------------------------------------------------------|
 c$$$*
@@ -1183,7 +1186,7 @@ c$$$*----------------------------------------------------------------------|
 c$$$*
 c$$$      integer i,j,k,icoef,mm,ih2,iodd,iused,ifree,iq,ip,iput,iget
 c$$$      double precision hnorm
-c$$$      complex*16 cp, cq, scale, scale2, ZERO, ONE
+c$$$      complex(8) cp, cq, scale, scale2, ZERO, ONE
 c$$$
 c$$$      parameter( ZERO=(0.0d0,0.0d0), ONE=(1.0d0,0.0d0) )
 c$$$      intrinsic ABS, DCMPLX, DBLE, INT, LOG, MAX
@@ -1315,7 +1318,7 @@ c$$$ 600  END
       implicit none
       integer          m, ldh, iflag, iwsp(m)
       double precision t, H(ldh,m), y(m)
-      complex*16       wsp(m*(m+2))
+      complex(8)       wsp(m*(m+2))
 
 *-----Purpose----------------------------------------------------------|
 *
@@ -1351,7 +1354,7 @@ c$$$ 600  END
       integer ndeg, i, j, ip, ih, iy, iz
       parameter ( ndeg=7 )
       double precision alpha0
-      complex*16 alpha(ndeg), theta(ndeg)
+      complex(8) alpha(ndeg), theta(ndeg)
 
       intrinsic DBLE
       
@@ -1412,7 +1415,7 @@ c$$$
 c$$$      implicit none
 c$$$      integer          m, ldh, iflag, iwsp(m)
 c$$$      double precision t, H(ldh,m), y(m)
-c$$$      complex*16       wsp(m*(m+2))
+c$$$      complex(8)       wsp(m*(m+2))
 c$$$
 c$$$*-----Purpose----------------------------------------------------------|
 c$$$*
@@ -1448,7 +1451,7 @@ c$$$*
 c$$$      integer ndeg, i, j, ip, ih, iy, iz
 c$$$      parameter ( ndeg=7 )
 c$$$      double precision alpha0
-c$$$      complex*16 alpha(ndeg), theta(ndeg), w
+c$$$      complex(8) alpha(ndeg), theta(ndeg), w
 c$$$
 c$$$      intrinsic ABS,DCMPLX,DBLE,MIN
 c$$$      
@@ -1507,7 +1510,7 @@ c$$$*----------------------------------------------------------------------|
       implicit none
       integer          m, ldh, iflag, iwsp(m)
       double precision t
-      complex*16       H(ldh,m), y(m), wsp(m*(m+2))
+      complex(8)       H(ldh,m), y(m), wsp(m*(m+2))
 
 *-----Purpose----------------------------------------------------------|
 *
@@ -1543,7 +1546,7 @@ c$$$*----------------------------------------------------------------------|
       integer     ndeg, i, j, ip, ih, iy, iz
       parameter ( ndeg=7 )
       double      precision alpha0
-      complex*16  alpha(2*ndeg), theta(2*ndeg)
+      complex(8)  alpha(2*ndeg), theta(2*ndeg)
       
 *---  Pointers ...
 
@@ -1605,7 +1608,8 @@ c$$$*----------------------------------------------------------------------|
 
       implicit none
       integer          m, ldh
-      double precision t, H(ldh,m), y(m), wsp(m*(m+2))
+      double precision t, H(ldh,m), y(m)
+      complex(8)       wsp(m*(m+2))
 
 *-----Purpose----------------------------------------------------------|
 *
@@ -1636,11 +1640,11 @@ c$$$*----------------------------------------------------------------------|
 *     ACM - Transactions On Mathematical Software, 24(1):130-156, 1998
 *----------------------------------------------------------------------|
 *
-      complex*16 ZERO
+      complex(8) ZERO
       integer ndeg, i, j, k, ip, ih, iy, iz
       parameter ( ndeg=7, ZERO=(0.0d0,0.0d0) )
       double precision alpha0
-      complex*16 alpha(ndeg), theta(ndeg), tmpc
+      complex(8) alpha(ndeg), theta(ndeg), tmpc
 
       intrinsic ABS,DBLE,MIN
       
@@ -1720,7 +1724,7 @@ c$$$*----------------------------------------------------------------------|
       implicit none
       integer          m, ldh
       double precision t
-      complex*16       H(ldh,m), y(m), wsp(m*(m+2))
+      complex(8)       H(ldh,m), y(m), wsp(m*(m+2))
 
 *-----Purpose----------------------------------------------------------|
 *
@@ -1751,11 +1755,11 @@ c$$$*----------------------------------------------------------------------|
 *     ACM - Transactions On Mathematical Software, 24(1):130-156, 1998
 *----------------------------------------------------------------------|
 *
-      complex*16 ZERO
+      complex(8) ZERO
       integer ndeg, i, j, k, ip, ih, iy, iz
       parameter ( ndeg=7, ZERO=(0.0d0,0.0d0) )
       double precision alpha0
-      complex*16 alpha(2*ndeg), theta(2*ndeg), tmpc
+      complex(8) alpha(2*ndeg), theta(2*ndeg), tmpc
 
       intrinsic ABS,DBLE,CONJG,MIN
       
@@ -2105,21 +2109,24 @@ c$$$*----------------------------------------------------------------------|
 *
       nexph = nexph + 1
       mx = mbrkdwn + k1
-      if ( ideg.ne.0 ) then
+c$$$  The ideg is set to default value 6 and cannot be changed from the R 
+c$$$  interface. Due to type conversion warnings, the code for using the 
+c$$$  rational Chebyshev approximation instead of pade has been commented out.
+c$$$       if ( ideg.ne.0 ) then
 *---     irreducible rational Pade approximation ...
          call DGPADM( ideg, mx, sgn*t_step, wsp(ih),mh,
      .                wsp(ifree),lfree, iwsp, iexph, ns, iflag )
          iexph = ifree + iexph - 1
          nscale = nscale + ns
-      else
-*---     uniform rational Chebyshev approximation ...
-         iexph = ifree
-         do i = 1,mx
-            wsp(iexph+i-1) = 0.0d0
-         enddo
-         wsp(iexph) = 1.0d0
-         call DNCHBV(mx,sgn*t_step,wsp(ih),mh,wsp(iexph),wsp(ifree+mx))
-      endif
+c$$$      else
+c$$$*---     uniform rational Chebyshev approximation ...
+c$$$         iexph = ifree
+c$$$         do i = 1,mx
+c$$$            wsp(iexph+i-1) = 0.0d0
+c$$$         enddo
+c$$$         wsp(iexph) = 1.0d0
+c$$$         call DNCHBV(mx,sgn*t_step,wsp(ih),mh,wsp(iexph),wsp(ifree+mx))
+c$$$      endif
 
 
 * 
@@ -2501,21 +2508,24 @@ c$$$*----------------------------------------------------------------------|
 *
       nexph = nexph + 1
       mx = mbrkdwn + k1
-      if ( ideg.ne.0 ) then
+c$$$  The ideg is set to default value 6 and cannot be changed from the R 
+c$$$  interface. Due to type conversion warnings, the code for using the 
+c$$$  rational Chebyshev approximation instead of pade has been commented out.
+c$$$       if ( ideg.ne.0 ) then
 *---     irreducible rational Pade approximation ...
          call DGPADM( ideg, mx, sgn*t_step, wsp(ih),mh,
      .                wsp(ifree),lfree, iwsp, iexph, ns, iflag )
          iexph = ifree + iexph - 1
          nscale = nscale + ns
-      else
-*---     uniform rational Chebyshev approximation ...
-         iexph = ifree
-         do i = 1,mx
-            wsp(iexph+i-1) = 0.0d0
-         enddo
-         wsp(iexph) = 1.0d0
-         call DNCHBV(mx,sgn*t_step,wsp(ih),mh,wsp(iexph),wsp(ifree+mx))
-      endif
+c$$$      else
+c$$$*---     uniform rational Chebyshev approximation ...
+c$$$        iexph = ifree
+c$$$         do i = 1,mx
+c$$$            wsp(iexph+i-1) = 0.0d0
+c$$$         enddo
+c$$$         wsp(iexph) = 1.0d0
+c$$$         call DNCHBV(mx,sgn*t_step,wsp(ih),mh,wsp(iexph),wsp(ifree+mx))
+c$$$      endif
 
 * 
 *---  error estimate ...
@@ -2633,7 +2643,7 @@ c$$$*----------------------------------------------------------------------|
       integer          n, nz, m, lwsp, liwsp, itrace, iflag, mxstep,
      .     iwsp(liwsp), ia(*), ja(*)
       double precision t, tol, anorm
-      complex*16       v(n), w(n), wsp(lwsp), a(*)
+      complex(8)       v(n), w(n), wsp(lwsp), a(*)
       external         matvec
 
 *-----Purpose----------------------------------------------------------|
@@ -2687,7 +2697,7 @@ c$$$*----------------------------------------------------------------------|
 *
 *     matvec : external subroutine for matrix-vector multiplication.
 *              synopsis: matvec( x, y, a, ia, ja, n, nz )
-*                        complex*16 x(*), y(*)
+*                        complex(8) x(*), y(*)
 *              computes: y(1:n) <- A*x(1:n)
 *                        where A is the principal matrix.
 *
@@ -2764,7 +2774,7 @@ c$$$*----------------------------------------------------------------------|
 *     ACM - Transactions On Mathematical Software, 24(1):130-156, 1998
 *----------------------------------------------------------------------|
 
-      complex*16 ZERO, ONE
+      complex(8) ZERO, ONE
       parameter( ZERO=(0.0d0,0.0d0), ONE=(1.0d0,0.0d0) )
       integer i, j, k1, mh, mx, iv, ih, j1v, ns, ifree, lfree, iexph,
      .        ireject,ibrkflag,mbrkdwn, nmult, nreject, nexph, nscale,
@@ -2773,10 +2783,10 @@ c$$$*----------------------------------------------------------------------|
      .                 s_error, x_error, t_now, t_new, t_step, t_old,
      .                 xm, beta, break_tol, p1, p2, p3, eps, rndoff,
      .                 vnorm, avnorm, hj1j, hump, SQR1
-      complex*16 hij
+      complex(8) hij
 
       intrinsic AINT,ABS,DCMPLX,DBLE,INT,LOG10,MAX,MIN,NINT,SIGN,SQRT
-      complex*16 ZDOTC
+      complex(8) ZDOTC
       double precision DZNRM2
 *
 *---  check restrictions on input parameters ...
@@ -3033,7 +3043,7 @@ c$$$*----------------------------------------------------------------------|
       integer          n, nz, m, lwsp, liwsp, itrace, iflag, mxstep,
      .     iwsp(liwsp), ia(*), ja(*)
       double precision t, tol, anorm
-      complex*16       v(n), w(n), wsp(lwsp), a(*)
+      complex(8)       v(n), w(n), wsp(lwsp), a(*)
       external         matvec
 
 *-----Purpose----------------------------------------------------------|
@@ -3086,7 +3096,7 @@ c$$$*----------------------------------------------------------------------|
 *
 *     matvec : external subroutine for matrix-vector multiplication.
 *              synopsis: matvec( x, y, a, ia, ja, n, nz )
-*                        complex*16 x(*), y(*)
+*                        complex(8) x(*), y(*)
 *              computes: y(1:n) <- A*x(1:n)
 *                        where A is the principal matrix.
 *
@@ -3163,7 +3173,7 @@ c$$$*----------------------------------------------------------------------|
 *     ACM - Transactions On Mathematical Software, 24(1):130-156, 1998
 *----------------------------------------------------------------------|
 *
-      complex*16 ZERO, ONE
+      complex(8) ZERO, ONE
       parameter( ZERO=(0.0d0,0.0d0), ONE=(1.0d0,0.0d0) )
       integer i, j, k1, mh, mx, iv, ih, j1v, ns, ifree, lfree, iexph,
      .        ireject,ibrkflag,mbrkdwn, nmult, nreject, nexph, nscale,
@@ -3172,10 +3182,10 @@ c$$$*----------------------------------------------------------------------|
      .                 s_error, x_error, t_now, t_new, t_step, t_old,
      .                 xm, beta, break_tol, p1, p2, p3, eps, rndoff,
      .                 vnorm, avnorm, hj1j, hump, SQR1
-      complex*16 hjj
+      complex(8) hjj
 
       intrinsic AINT,ABS,DCMPLX,DBLE,INT,LOG10,MAX,MIN,NINT,SIGN,SQRT
-      complex*16 ZDOTC
+      complex(8) ZDOTC
       double precision DZNRM2
 *
 *---  check restrictions on input parameters ...
@@ -3598,6 +3608,8 @@ c$$$*----------------------------------------------------------------------|
       x_error  = 0.0d0
       t_now    = 0.0d0
       t_new    = 0.0d0
+      
+      xm = 1.0d0/DBLE( m )
 
       p1 = 4.0d0/3.0d0
  1    p2 = p1 - 1.0d0
@@ -3970,6 +3982,8 @@ c$$$*----------------------------------------------------------------------|
       x_error  = 0.0d0
       t_now    = 0.0d0
       t_new    = 0.0d0
+      
+      xm = 1.0d0/DBLE( m )
 
       p1 = 4.0d0/3.0d0
  1    p2 = p1 - 1.0d0
@@ -4186,7 +4200,7 @@ c$$$*----------------------------------------------------------------------|
       integer          n, nz, m, lwsp, liwsp, itrace, iflag, mxstep,
      .     iwsp(liwsp), ia(*), ja(*)
       double precision t, tol, anorm
-      complex*16       u(n), v(n), w(n), wsp(lwsp), a(*)
+      complex(8)       u(n), v(n), w(n), wsp(lwsp), a(*)
       external         matvec
 
 *-----Purpose----------------------------------------------------------|
@@ -4307,7 +4321,7 @@ c$$$*----------------------------------------------------------------------|
 *     ACM - Transactions On Mathematical Software, 24(1):130-156, 1998
 *----------------------------------------------------------------------|
 *
-      complex*16 ZERO, ONE
+      complex(8) ZERO, ONE
       parameter( ZERO=(0.0d0,0.0d0), ONE=(1.0d0,0.0d0) )
       integer i, j, k1, mh, mx, iv, ih, j1v, ns, ifree, lfree, iexph,
      .        ireject,ibrkflag,mbrkdwn, nmult, nreject, nexph, nscale,
@@ -4316,10 +4330,10 @@ c$$$*----------------------------------------------------------------------|
      .                 s_error, x_error, t_now, t_new, t_step, t_old,
      .                 xm, beta, break_tol, p1, p2, p3, eps, rndoff,
      .                 avnorm, hj1j, SQR1
-      complex*16 hij
+      complex(8) hij
 
       intrinsic AINT,ABS,DCMPLX,DBLE,INT,LOG10,MAX,MIN,NINT,SIGN,SQRT
-      complex*16 ZDOTC
+      complex(8) ZDOTC
       double precision DZNRM2
 *
 *---  check restrictions on input parameters ...
@@ -4355,6 +4369,8 @@ c$$$*----------------------------------------------------------------------|
       x_error  = 0.0d0
       t_now    = 0.0d0
       t_new    = 0.0d0
+      
+      xm = 1.0d0/DBLE( m )
 
       p1 = 4.0d0/3.0d0
  1    p2 = p1 - 1.0d0
@@ -4569,7 +4585,7 @@ c$$$*----------------------------------------------------------------------|
       integer          n, nz, m, lwsp, liwsp, itrace, iflag, mxstep,
      .     iwsp(liwsp), ia(*), ja(*)
       double precision t, tol, anorm
-      complex*16       u(n), v(n), w(n), wsp(lwsp), a(*)
+      complex(8)       u(n), v(n), w(n), wsp(lwsp), a(*)
       external         matvec
 
 *-----Purpose----------------------------------------------------------|
@@ -4689,7 +4705,7 @@ c$$$*----------------------------------------------------------------------|
 *     ACM - Transactions On Mathematical Software, 24(1):130-156, 1998
 *----------------------------------------------------------------------|
 *
-      complex*16 ZERO, ONE
+      complex(8) ZERO, ONE
       parameter( ZERO=(0.0d0,0.0d0), ONE=(1.0d0,0.0d0) )
       integer i, j, k1, mh, mx, iv, ih, j1v, ns, ifree, lfree, iexph,
      .        ireject,ibrkflag,mbrkdwn, nmult, nreject, nexph, nscale,
@@ -4698,10 +4714,10 @@ c$$$*----------------------------------------------------------------------|
      .                 s_error, x_error, t_now, t_new, t_step, t_old,
      .                 xm, beta, break_tol, p1, p2, p3, eps, rndoff,
      .                 avnorm, hj1j, SQR1
-      complex*16 hjj
+      complex(8) hjj
 
       intrinsic AINT,ABS,DCMPLX,DBLE,INT,LOG10,MAX,MIN,NINT,SIGN,SQRT
-      complex*16 ZDOTC
+      complex(8) ZDOTC
       double precision DZNRM2
 *
 *---  check restrictions on input parameters ...
@@ -4737,6 +4753,8 @@ c$$$*----------------------------------------------------------------------|
       x_error  = 0.0d0
       t_now    = 0.0d0
       t_new    = 0.0d0
+      
+      xm = 1.0d0/DBLE( m )
 
       p1 = 4.0d0/3.0d0
  1    p2 = p1 - 1.0d0

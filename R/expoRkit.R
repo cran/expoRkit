@@ -52,7 +52,7 @@
 ##' @param u \code{numeric} or \code{complex} vector. Default \code{NULL}.
 ##' @param anorm A norm of the matrix. Default is the sup-norm.
 ##' @param Markov \code{logical}, if \code{TRUE} the (transposed)
-##' matrix is taken to be an intensity matrix and steps are taken to
+##' matrix is taken to be a rate matrix and steps are taken to
 ##' ensure that the computed result is a probability vector. Default \code{FALSE}. 
 ##' @param m \code{integer}, the maximum size for the Krylov basis. 
 ##' @param tol \code{numeric}. A value of 0 (default) means square

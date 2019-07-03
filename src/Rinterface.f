@@ -120,7 +120,7 @@
       integer n, nz, ia(*), ja(*), m, lwsp, iflag, iwsp(m+6), mxstep,
      .     itrace, sflag
       double precision t, tol, anorm
-      complex*16 a(*), v(n), w(n), 
+      complex(8) a(*), v(n), w(n), 
      .     wsp( n*(m+2)+5*(m+2)*(m+2)+6+1  )
       external zgcoov, zgccsv, zgcrsv
 
@@ -169,7 +169,7 @@
       integer n, nz, ia(*), ja(*), m, lwsp, iflag, iwsp(m+6), mxstep,
      .     itrace, sflag
       double precision t, tol, anorm
-      complex*16 a(*), u(n), v(n), w(n),
+      complex(8) a(*), u(n), v(n), w(n),
      .     wsp( n*(m+3)+5*(m+3)*(m+3)+6+1 )
       external zgcoov, zgccsv, zgcrsv
 

@@ -64,7 +64,7 @@
 ##' solution is computed.
 ##' @param u a \code{numeric} vector. Default \code{NULL}.
 ##' @param Markov \code{logical}. If \code{TRUE} the matrix is taken
-##' to be an rate matrix and steps are taken to ensure that the
+##' to be a rate matrix and steps are taken to ensure that the
 ##' computed result is a probability vector. Default \code{FALSE}.
 ##' @param transpose \code{logical}. If \code{TRUE} transpose the
 ##' matrix before the solution is computed. Default equals
@@ -85,8 +85,8 @@
 ##'             4, 4)
 ##' v <- c(1, 1, 1, 1)
 ##' 
-##' require(Matrix)
-##' require(SparseM)
+##' library(Matrix)
+##' library(SparseM)
 ##' 
 ##' w <- cbind(padm(x) %*% v,
 ##'            expv(x, v),
@@ -136,7 +136,7 @@
 ##' i <- c(i[-1], i, i[-n])
 ##'
 ##' ## Sparse rate matrix constructed without dense intermediate
-##' require(Matrix)
+##' library(Matrix)
 ##' Q <- sparseMatrix(i = i, j = j, x = rates, dims = c(n, n))
 ##'
 ##' ## Evolution of uniform initial distribution
